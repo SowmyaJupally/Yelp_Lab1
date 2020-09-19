@@ -16,7 +16,7 @@ class Home extends Component{
             homeFlag : false
         }
         //Bind the handlers to this class
-        
+        //some change 
         this.submitEvents = this.submitEvents.bind(this);
         
     }
