@@ -5,7 +5,7 @@ import axios from 'axios';
 import cookie from 'react-cookies';
 import {Redirect} from 'react-router';
 import {backend} from '../../webconfig';
-import Background from '../../yelp.png';
+
 
 //Define a Login Component
 class Navbar extends Component{
@@ -17,7 +17,8 @@ class Navbar extends Component{
         //maintain the state required for this component
         this.state = {
             headerArray:[],
-            firstTime:true
+            firstTime:true,
+            loginFlag:false
         }
         //Bind the handlers to this class
     }
@@ -61,13 +62,13 @@ class Navbar extends Component{
                         <div className="navbar-header">
                         <a href="/register"><span className="glyphicon glyphicon-tasks"></span> Register</a>
                         <a href="/login"><span className="glyphicon glyphicon-log-in"></span> Login</a>
-                        <a href="/home"><span className="glyphyicon glyphicon-log-in"></span> Home</a>
                         <a href="/" onClick={this.handleLogout}><span className="glyphicon glyphicon-log-in"></span> Logout</a>
                         </div>
                     </div>
                 </nav>
             </div>
             </div>
+            
         )
     }
 }

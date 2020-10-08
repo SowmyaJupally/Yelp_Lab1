@@ -3,6 +3,9 @@ import '../../App.css';
 import axios from 'axios';
 import cookie from 'react-cookies';
 import {Redirect} from 'react-router';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { userLogin } from '../../actions/userlogin'
 
 //Define a Login Component
 class Login extends Component{
@@ -49,8 +52,15 @@ class Login extends Component{
             email : this.state.email,
             password : this.state.password
         }
+
+
+        this.props.userLogin(data);
+
+        this.setState({
+            authFlag:1
+        })
         //set the with credentials to true
-        axios.defaults.withCredentials = true;
+       /* axios.defaults.withCredentials = true;
         //make a post request with the user data
         axios.post('http://localhost:3001/login',data)
             .then(response => {
@@ -70,7 +80,7 @@ class Login extends Component{
                 }
                 
 
-            });
+            });*/
     }
 
     render(){
@@ -82,6 +92,12 @@ class Login extends Component{
             console.log("Cookie Loaded");
             redirectVar = <Redirect to= "/home"/>
         }
+
+        if(this.props.user && this.props.user.user_id){
+            localStorage.setItem("user_id", this.props.user.user_id);
+            localStorage.setItem("is_owner", this.props.user.is_owner)
+        }
+
         if(this.state.authFlag===2)
         redirectVar=<p style={{color:"red",textAlign:"center"}} > INVALID CREDENTIALS</p>
         return(
@@ -112,5 +128,15 @@ class Login extends Component{
     }
 }
 
+Login.propTypes = {
+    userLogin:PropTypes.func.isRequired,
+    user:PropTypes.object.isRequired
+}
+
+const mapStateToProps = state => { 
+    return ({
+    user: state.login.user
+})};
+
 //export Login Component
-export default Login;
+export default connect(mapStateToProps, { userLogin })(Login);

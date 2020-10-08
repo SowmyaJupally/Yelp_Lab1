@@ -3,20 +3,21 @@ import '../../App.css';
 import axios from 'axios';
 import cookie from 'react-cookies';
 import {Redirect} from 'react-router';
+import logo from '../Images/yogaEvent.png';
+import 'bootstrap/dist/css/bootstrap.css';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 //Define a Login Component
 class Events extends Component{
     //call the constructor method
     constructor(props){
-        //Call the constrictor of Super class i.e The Component
         super(props);
-        //maintain the state required for this component
         this.state = {
-            
-            homeFlag : false
+            events:[],
+            redirect:"",
+            eventFlag : false,
+            event_id:this.props.match.params.id
         }
-        //Bind the handlers to this class
-        
         this.submitEvents = this.submitEvents.bind(this);
         
     }
@@ -26,6 +27,19 @@ class Events extends Component{
         this.setState({
             homeFlag : false
         })
+    }
+
+    componentDidMount(){
+        axios.get('http://localhost:3001/' + `getevents/` + this.state.eventFlag)
+        .then((response)=>{
+            this.setState({
+                events: this.state.events.concat(response.data)
+            })
+        })
+    }
+
+    viewEvents(id){
+        this.setState({redirect:`/eventdetails/${id}`});
     }
     
     //submit event handler to send a request to the node backend
@@ -62,25 +76,69 @@ class Events extends Component{
     
 
     render(){
-        //redirect based on successful login
+        /*redirect based on successful login
         let redirectVar = null;
         if(this.state.homeFlag === true){
-            redirectVar = <Redirect to= "/events"/>
-        }
+            redirectVar = <Redirect to= "/events"/>*/
         return(
             <div>
-                {redirectVar}
-            <div class="container">
-            <div class="events-form">
-            <div class="main-div">
-            <div class="panel">
-            <button onClick = {this.submitEvents} class="btn btn-primary">Events</button>
-            </div>
-            </div>
-            </div></div>
-            </div>
+                <React.Fragment>
+                <nav class="navbar navbar-light bg-light">
+                <form class="form-inline">
+                <a class="logo-link" href="/home"></a>
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"></input>
+                    <button
+                        style={{
+                            width: '15%',
+                            opacity: '1.0',
+                                backgroundColor: 'red',
+                                }}
+                            type='button'
+                            className='btn'>
+                            <i className='fas fa-search'></i>
+                    </button>
             
-            
+                </form>
+                </nav>
+                </React.Fragment>
+                
+                <div class="card">
+                <img class="card-img-top" src={logo} class = "float-left"/>
+                <div class='card-body'>
+                <h5 class="card-title" class="font-weight-bold">Yoga For Kids</h5>
+                <p class="card-text"> From age 5-12 kids Yoga</p>
+                <form class="form-inline">
+                <button
+                style={{
+                    width: '10%',
+                    padding:'1px',
+                    opacity: '1.0',
+                        backgroundColor: 'white',
+                        }}
+                    type='button'
+                    className='btn'>
+                    <i className='fas fa-map-marker-alt'></i>
+                </button>
+                <p class="card-text">  Virual Via Facebook Live</p></form>
+                <form class="form-inline">
+                <button
+                style={{
+                    width: '10%',
+                    padding:'1px',
+                    opacity: '1.0',
+                        backgroundColor: 'white',
+                        }}
+                    type='button'
+                    className='btn'>
+                    <i className='fas fa-calendar-alt'></i>
+            </button>
+            <p class="card-text"> Sep 28, 10AM-12PM</p></form>
+                <a href="#" class="btn btn-primary">See Event</a>
+                </div></div>
+                
+
+
+            </div>
         )
     }
 }

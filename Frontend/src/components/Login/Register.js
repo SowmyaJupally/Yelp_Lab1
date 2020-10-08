@@ -3,6 +3,9 @@ import '../../App.css';
 import axios from 'axios';
 import cookie from 'react-cookies';
 import {Redirect} from 'react-router';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { ownerSignup } from '../../actions/signupAction';
 
 //Define a Login Component
 class Register extends Component{
@@ -18,6 +21,7 @@ class Register extends Component{
             lastName:"",
             ZIP_Code:"",
             Birthday:"",
+            is_owner:"",
             registerFlag : false,
             validateError: false,
             errorRedirect : false
@@ -29,6 +33,7 @@ class Register extends Component{
         this.lastNameChangeHandler = this.lastNameChangeHandler.bind(this);
         this.ZIP_CodeChangeHandler = this.ZIP_CodeChangeHandler.bind(this);
         this.BirthdayChangeHandler = this.BirthdayChangeHandler.bind(this);
+        this.is_ownerChangeHandler = this.is_ownerChangeHandler.bind(this);
         this.submitRegister = this.submitRegister.bind(this);
     }
     
@@ -70,6 +75,12 @@ class Register extends Component{
             Birthday : e.target.value
         })
     }
+
+    is_ownerChangeHandler = (e) => {
+        this.setState({
+            is_owner : e.target.value
+        })
+    }
     //submit Login handler to send a request to the node backend
     submitRegister = (e) => {
         //prevent page from refresh
@@ -88,7 +99,13 @@ class Register extends Component{
                 validateError:true
             })
         }
-        else{
+
+        this.props.ownerSignup(data);
+
+        this.setState({
+            signupFlag: 1
+        });
+        /*else{
         //set the with credentials to true
         axios.defaults.withCredentials = true;
         //make a post request with the user data
@@ -117,7 +134,7 @@ class Register extends Component{
                     });
                 }
             }  ) 
-    }
+    }*/
     }
     render(){
         //redirect based on successful login
@@ -160,8 +177,14 @@ class Register extends Component{
             <div class="container">
                 
                 <div class="register-form">
-                <h1>Register for yelp</h1>
+                <h1>Sign Up for yelp</h1>
+                
                 <form id = "registerForm" action = "register" method = "POST">
+                <select name="Owner" id="owner" required onChange={this.is_ownerChangeHandler}  >
+                    <option value="Customer">Customer</option>
+                    <option value="Owner">Owner</option>
+                   
+                </select>
                 <input
                 type="email"
                 name="email"
@@ -218,5 +241,16 @@ class Register extends Component{
     }
 }
 
+Register.propTypes = {
+    OwnerSignup: PropTypes.func.isRequired,
+    user: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+    user: state.signup.user
+});
+
+export default connect(mapStateToProps, { ownerSignup })(Register);
+
 //export Login Component
-export default Register;
+//export default Register;
