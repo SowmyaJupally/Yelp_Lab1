@@ -83,15 +83,18 @@ class Restaurant extends Component {
             section = null,
             renderOutput = [],
             resImageSrc = null,
-            resName, resPhone, resAddress, resCuisine, resZIP,
+            resName, resPhone, resAddress, resCuisine, resZIP, 
             restaurant = this.props.location.state;
 
+            
+
             console.log("props.location:" , this.props)
+            localStorage.setItem("res-id", this.props.location.state.res_id);
 
         if (
             //localStorage.getItem("user_id") || 
         !this.props.location.state) {
-            console.log("reirecting to home")
+            console.log("redirecting to home")
             redirectVar = <Redirect to="/home" />
         }
 
@@ -133,6 +136,8 @@ class Restaurant extends Component {
                     {renderOutput}
                 </Container>
                 <center>
+                    <Button variant="primary" classname="Write a Review" href="/reviews" >Write A Review</Button>
+                    &nbsp;&nbsp;
                     <Button variant="primary" classname="home"  href="/home" >Home</Button>
                     &nbsp;&nbsp;
                     <Button variant="success" name="goToCart" href="/cart">Go To Cart</Button>

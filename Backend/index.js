@@ -21,6 +21,7 @@ app.use(session({
 
 var mysql      = require('mysql');
 const { connect } = require('http2');
+const { appendFile } = require('fs');
 var connection = mysql.createConnection({
   host     : 'database-1.cynsbb7owd5s.us-east-1.rds.amazonaws.com',
   user     : 'admin',
@@ -29,6 +30,20 @@ var connection = mysql.createConnection({
   dateStrings: true
 });
 
+
+// const pool = mysql.createPool({
+//   connectionLimit: 100,
+//   host     : 'database-1.cynsbb7owd5s.us-east-1.rds.amazonaws.com',
+//   user: 'admin',
+//   password: 'Sowmyasonu46$',
+//   database: 'yelp'
+// });
+
+// pool.getConnection((err) => {
+//   if(err){
+//     throw 'Error occured: ' + err;
+//   }
+// });
 //Allow Access Control
 app.use(function(req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
@@ -52,6 +67,42 @@ app.post('/createRestuarant', (req,res)=>{
   res.end("OK")
 })
 
+app.post('/customer', (req, res) => {
+  var hashedPassword;
+  console.log("jaffa",req.body)
+  if(req.body.password && req.body.password !== "")
+  {
+     hashedPassword =  req.body.password ;
+  }
+  else{
+     hashedPassword = req.body.password;
+  }
+  let sql = `CALL Customer_update('${req.body.user_id}', '${req.body.email_id}', '${req.body.name}','${hashedPassword}', '${req.body.address}', '${req.body.phone_number}');`;
+  
+  connection.query(sql, (err, result) => {
+    console.log("error",err)
+    if (err) {
+      console.log(err);
+      res.writeHead(500, {
+        'Content-Type': 'text/plain'
+      });
+      res.end("Error in Data");
+    }
+    if (result && result.length > 0 && result[0][0].status === 'CUSTOMER_UPDATED') {
+      res.writeHead(200, {
+        'Content-Type': 'text/plain'
+      });
+      res.end(result[0][0].status);
+    }
+    else if (result && result.length > 0 && result[0][0].status === 'NO_RECORD') {
+      res.writeHead(401, {
+        'Content-Type': 'text/plain'
+      });
+      res.end(result[0][0].status);
+    }
+  });
+});
+
 
 app.post('/ownerhome', (request, response) =>{
   console.log("OWNER HOME", request.body);
@@ -60,7 +111,7 @@ app.post('/ownerhome', (request, response) =>{
   var zip_Code = request.body.zipCode;
   var user_id = request.body.user_id;
 
-  console.log("jaffa", zip_Code, cuisine, res_name, user_id)
+  console.log( zip_Code, cuisine, res_name, user_id)
     if (res_name && cuisine && zip_Code) {
     console.log("establishing connection for ownerhome");
     var sql = "INSERT INTO restaurants (res_name, res_cuisine, res_zip_code,user_id) VALUES ('" + res_name + "','" +cuisine +"','"+ zip_Code +"','"+ user_id+ "')";
@@ -86,14 +137,19 @@ app.post('/ownerhome', (request, response) =>{
     )
 }});
 
+
+
 app.get('/pendingorders/:user_id', (req, res) => {
 
   let sql = `CALL Pending_Orders_get(${req.params.user_id});`;
   connection.query(sql, (err, result) => {
+
+    console.log(" error and result:", err,result);
     if (err) {
       res.writeHead(500, {
         'Content-Type': 'text/plain'
       });
+      console.log("500 error");
       res.end("Database Error");
     }
     if (result && result.length > 0 && result[0][0] && result[0][0].status !== 'NO_PENDING_ORDERS') {
@@ -107,6 +163,79 @@ app.get('/pendingorders/:user_id', (req, res) => {
         'Content-Type': 'text/plain'
       });
       res.end("NO_PENDING_ORDERS");
+    }
+  });
+});
+
+app.get('/respendingorders/:user_id', (req, res) => {
+
+  let sql = `CALL Res_Pending_Orders_get(${req.params.user_id});`;
+  connection.query(sql, (err, result) => {
+
+    console.log(" error and result:", err,result);
+    if (err) {
+      res.writeHead(500, {
+        'Content-Type': 'text/plain'
+      });
+      console.log("500 error");
+      res.end("Database Error");
+    }
+    if (result && result.length > 0 && result[0][0] && result[0][0].status !== 'NO_PENDING_ORDERS') {
+      res.writeHead(200, {
+        'Content-Type': 'text/plain'
+      });
+      res.end(JSON.stringify(result[0]));
+    }
+    else {
+      res.writeHead(500, {
+        'Content-Type': 'text/plain'
+      });
+      res.end("NO_PENDING_ORDERS");
+    }
+  });
+});
+
+app.post('/cancelorder', (req, res) => {
+  let sql = `UPDATE customer_orders SET order_status = 'ORDER_CANCELLED' WHERE order_id = ${req.body.order_id};`;
+  connection.query(sql, (err, result) => {
+    if (err) {
+      res.writeHead(500, {
+        'Content-Type': 'text/plain'
+      });
+      res.end("Database Error");
+    }
+    if (result) {
+      res.writeHead(200, {
+        'Content-Type': 'text/plain'
+      });
+      res.end("ORDER_CANCELLED");
+    }
+  });
+});
+
+
+
+app.get('/orderitems/:order_id', (req, res) => {
+
+  let sql = `CALL Order_Items_get(${req.params.order_id});`;
+  connection.query(sql, (err, result) => {
+    if (err) {
+      res.writeHead(500, {
+        'Content-Type': 'text/plain'
+      });
+      res.end("Database Error");
+    }
+    if (result && result.length > 0 && result[0][0]) {
+      res.writeHead(200, {
+        'Content-Type': 'text/plain'
+      });
+      res.end(JSON.stringify(result[0]));
+    }
+    else {
+      res.writeHead(500, {
+        'Content-Type': 'text/plain'
+      });
+      res.end("NO_RECORDS");
     }
   });
 });
@@ -128,6 +257,321 @@ app.post('/orderstatus', (req, res) => {
     }
   });
 });
+
+app.get('/completedorders/:user_id', (req, res) => {
+
+  let completedorders = `CALL Completed_Orders_get(${req.params.user_id});`;
+  connection.query(completedorders, (err, result) => {
+
+    console.log("error", err)
+    if (err) {
+      res.writeHead(500, {
+        'Content-Type': 'text/plain'
+      });
+      res.end("Database Error");
+    }
+    if (result && result.length > 0 && result[0][0] && result[0][0].status !== "NO_COMPLETED_ORDERS") {
+      res.writeHead(200, {
+        'Content-Type': 'text/plain'
+      });
+      res.end(JSON.stringify(result[0]));
+    }
+    else {
+      res.writeHead(500, {
+        'Content-Type': 'text/plain'
+      });
+      res.end("NO_COMPLETED_ORDERS");
+    }
+  });
+});
+
+app.post('/placeorder', (req, res) => {
+  let sql = `CALL Orders_put(${req.body.user_id}, ${req.body.res_id}, '${req.body.order_status}',${req.body.sub_total}, ${req.body.tax}, ${req.body.delivery}, ${req.body.discount}, ${req.body.total});`;
+  connection.query(sql, (err, result) => {
+    if (err) {
+      console.log(err);
+      res.writeHead(500, {
+        'Content-Type': 'text/plain'
+      });
+      res.end("Database Error");
+    }
+    if (result && result.length > 0 && result[0][0].status === 'ORDER_PLACED') {
+      req.body.cart_items.forEach(cart_item => {
+        let sqlItem = `CALL Orders_Items_put(${result[0][0].order_id}, ${cart_item.item_id}, ${cart_item.item_quantity});`;
+        connection.query(sqlItem, (err, result) => {
+          if (err) {
+            console.log(err);
+            res.writeHead(500, {
+              'Content-Type': 'text/plain'
+            });
+            res.end("Database Error");
+          }
+        });
+      });
+      res.writeHead(200, {
+        'Content-Type': 'text/plain'
+      });
+      res.end(JSON.stringify(result[0][0]));
+    }
+    else {
+      res.writeHead(500, {
+        'Content-Type': 'text/plain'
+      });
+      res.end(result[0][0]);
+    }
+  });
+});
+
+app.get('/sections/:user_id', (req, res) => {
+  let sql = `CALL Menu_Sections_get(NULL, ${req.params.user_id});`;
+  connection.query(sql, (err, result) => {
+    if (err) {
+      res.writeHead(500, {
+        'Content-Type': 'text/plain'
+      });
+      res.end("Database Error");
+    }
+    if (result && result.length > 0 && result[0][0]) {
+      res.writeHead(200, {
+        'Content-Type': 'text/plain'
+      });
+      res.end(JSON.stringify(result[0]));
+    }
+  });
+});
+
+app.get('/sectionitem/:menu_section_id', (req, res) => {
+  let sql = `CALL Menu_Sections_Record_get(${req.params.menu_section_id});`;
+  connection.query(sql, (err, result) => {
+    if (err) {
+      res.writeHead(500, {
+        'Content-Type': 'text/plain'
+      });
+      res.end("Database Error");
+    }
+    if (result && result.length > 0 && result[0][0]) {
+      res.writeHead(200, {
+        'Content-Type': 'text/plain'
+      });
+      res.end(JSON.stringify(result[0][0]));
+    }
+  });
+});
+
+app.post('/sections', (req, res) => {
+  let sql = `CALL Menu_Sections_put(NULL, ${req.body.user_id}, '${req.body.menu_section_name}');`;
+  connection.query(sql, (err, result) => {
+    if (err) {
+      console.log(err);
+      res.writeHead(500, {
+        'Content-Type': 'text/plain'
+      });
+      res.end("Database Error");
+    }
+    if (result && result.length > 0 && result[0][0].status === 'SECTION_ADDED') {
+      res.writeHead(200, {
+        'Content-Type': 'text/plain'
+      });
+      res.end(JSON.stringify(result[0][0]));
+    }
+    else if (result && result.length > 0 && result[0][0].status === 'SECTION_EXISTS') {
+      res.writeHead(500, {
+        'Content-Type': 'text/plain'
+      });
+      res.end(result[0][0].status);
+    }
+  });
+});
+
+app.post('/sectionsupdate', (req, res) => {
+  let sql = `CALL Menu_Sections_update(NULL, ${req.body.user_id}, ${req.body.menu_section_id}, '${req.body.menu_section_name}');`;
+  connection.query(sql, (err, result) => {
+    if (err) {
+      console.log(err);
+      res.writeHead(500, {
+        'Content-Type': 'text/plain'
+      });
+      res.end("Database Error");
+    }
+    if (result && result.length > 0 && result[0][0].status === 'SECTION_UPDATED') {
+      res.writeHead(200, {
+        'Content-Type': 'text/plain'
+      });
+      res.end(JSON.stringify(result[0][0]));
+    }
+    else if (result && result.length > 0 && result[0][0].status === 'SECTION_EXISTS') {
+      res.writeHead(500, {
+        'Content-Type': 'text/plain'
+      });
+      res.end(result[0][0].status);
+    }
+  });
+});
+
+app.post('/sectiondelete', (req, res) => {
+  let sql = `CALL Menu_Sections_del(${req.body.menu_section_id});`;
+  connection.query(sql, (err, result) => {
+    if (err) {
+      console.log(err);
+      res.writeHead(500, {
+        'Content-Type': 'text/plain'
+      });
+      res.end("Database Error");
+    }
+    if (result && result.length > 0 && result[0][0].status === 'SECTION_DELETED') {
+      res.writeHead(200, {
+        'Content-Type': 'text/plain'
+      });
+      res.end(result[0][0].status);
+    }
+    else if (result && result.length > 0 && result[0][0].status === 'NO_RECORD') {
+      res.writeHead(500, {
+        'Content-Type': 'text/plain'
+      });
+      res.end(result[0][0].status);
+    }
+  });
+});
+
+app.get('/items/:user_id', (req, res) => {
+  let sql = `CALL Menu_Items_get(NULL, ${req.params.user_id});`;
+  connection.query(sql, (err, result) => {
+    if (err) {
+      res.writeHead(500, {
+        'Content-Type': 'text/plain'
+      });
+      res.end("Database Error");
+    }
+    if (result && result.length > 0 && result[0][0]) {
+      res.writeHead(200, {
+        'Content-Type': 'text/plain'
+      });
+      res.end(JSON.stringify(result[0]));
+    }
+  });
+});
+
+app.get('/menuitem/:item_id', (req, res) => {
+  let sql = `CALL Menu_Items_Record_get(${req.params.item_id});`;
+  connection.query(sql, (err, result) => {
+    if (err) {
+      res.writeHead(500, {
+        'Content-Type': 'text/plain'
+      });
+      res.end("Database Error");
+    }
+    if (result && result.length > 0 && result[0][0]) {
+      res.writeHead(200, {
+        'Content-Type': 'text/plain'
+      });
+      res.end(JSON.stringify(result[0][0]));
+    }
+  });
+});
+
+app.post('/items', (req, res) => {
+  let sql = `CALL Menu_Items_put(${req.body.user_id}, NULL, '${req.body.item_name}', '${req.body.item_description}', ${req.body.item_price}, '${req.body.item_image}', NULL, '${req.body.menu_section_name}');`;
+  connection.query(sql, (err, result) => {
+    if (err) {
+      console.log(err);
+      res.writeHead(500, {
+        'Content-Type': 'text/plain'
+      });
+      res.end("Database Error");
+    }
+    if (result && result.length > 0 && result[0][0].status === 'ITEM_ADDED') {
+      res.writeHead(200, {
+        'Content-Type': 'text/plain'
+      });
+      res.end(JSON.stringify(result[0][0]));
+    }
+    else if (result && result.length > 0 && result[0][0].status === 'ITEM_EXISTS') {
+      res.writeHead(500, {
+        'Content-Type': 'text/plain'
+      });
+      res.end(result[0][0].status);
+    }
+  });
+});
+
+app.post('/itemsupdate', (req, res) => {
+  let sql = `CALL Menu_Items_update(${req.body.user_id}, NULL, ${req.body.item_id}, '${req.body.item_name}', '${req.body.item_description}', ${req.body.item_price}, '${req.body.item_image}', NULL, '${req.body.menu_section_name}');`;
+  connection.query(sql, (err, result) => {
+    if (err) {
+      console.log(err);
+      res.writeHead(500, {
+        'Content-Type': 'text/plain'
+      });
+      res.end("Database Error");
+    }
+    if (result && result.length > 0 && result[0][0].status === 'ITEM_UPDATED') {
+      res.writeHead(200, {
+        'Content-Type': 'text/plain'
+      });
+      res.end(JSON.stringify(result[0][0]));
+    }
+    else if (result && result.length > 0 && result[0][0].status === 'ITEM_EXISTS') {
+      res.writeHead(500, {
+        'Content-Type': 'text/plain'
+      });
+      res.end(result[0][0].status);
+    }
+  });
+});
+
+app.post('/itemdelete', (req, res) => {
+  let sql = `CALL Menu_Items_del(${req.body.item_id});`;
+  connection.query(sql, (err, result) => {
+    if (err) {
+      console.log(err);
+      res.writeHead(500, {
+        'Content-Type': 'text/plain'
+      });
+      res.end("Database Error");
+    }
+    if (result && result.length > 0 && result[0][0].status === 'ITEM_DELETED') {
+      res.writeHead(200, {
+        'Content-Type': 'text/plain'
+      });
+      res.end(result[0][0].status);
+    }
+    else if (result && result.length > 0 && result[0][0].status === 'NO_RECORD') {
+      res.writeHead(500, {
+        'Content-Type': 'text/plain'
+      });
+      res.end(result[0][0].status);
+    }
+  });
+});
+
+app.post('/reviews', function(request, response) {
+	var review = request.body.review;
+  var res_id = request.body.res_id;
+
+  console.log("Hola !! posting a review ", review, res_id)
+	if (review && res_id) {
+    var sql = "INSERT INTO Reviews (review, res_id) VALUES ('" + review + "','" +res_id + "')";
+    console.log("query established");
+    console.log(sql);
+    connection.query(sql, function(error, result, fields){
+      if(error) {
+      response.writeHead(400,{
+        'Content-type': 'text/plain'
+      })
+      console.log("error", error);
+      response.end("error in writing review");
+      }
+    else{
+      console.log("Review added successfully");
+      response.writeHead(200,{
+        'Content-type': 'text/plain'
+      })
+
+    console.log('result:' ,result)
+        response.end("Review added succesfully");
+    }}
+    )
+}});
 
 
 app.post('/login', function(request, response) {
@@ -234,7 +678,79 @@ app.post('/home', function(request, response) {
   })
 })
 
-app.get('/getevents', function(request, response) {
+app.get('/customer/:user_id', (req, res) => {
+  let sql = `CALL Customer_get('${req.params.user_id}', NULL);`;
+
+  
+  connection.query(sql, (err, result) => {
+    console.log("error",err)
+    if (err) {
+      res.writeHead(500, {
+        'Content-Type': 'text/plain'
+      });
+      res.end("Error in Data");
+    }
+    if (result && result.length > 0 && result[0][0]) {
+      res.writeHead(200, {
+        'Content-Type': 'text/plain'
+      });
+      res.end(JSON.stringify(result[0]));
+    }
+  });
+});
+
+app.get('/restaurants/:user_id', (req, res) => {
+  let sql = `CALL Restaurant_Owner_get('${req.params.user_id}', NULL, NULL);`;
+  connection.query(sql, (err, result) => {
+    if (err) {
+      res.writeHead(500, {
+        'Content-Type': 'text/plain'
+      });
+      res.end("Error in Data");
+    }
+    if (result && result.length > 0 && result[0][0]) {
+      res.writeHead(200, {
+        'Content-Type': 'text/plain'
+      });
+      res.end(JSON.stringify(result[0]));
+    }
+  });
+});
+
+
+app.post('/restaurants', (req, res) => {
+  if (req.body.password && req.body.password !== "") {
+    var hashedPassword = "'" + passwordHash.generate(req.body.password) + "'";
+  }
+  else {
+    var hashedPassword = "NULL";
+  }
+  let sql = `CALL Restaurant_Owner_update(NULL, '${req.body.email_id}', '${req.body.name}', '${req.body.res_name}', '${req.body.res_cuisine}', ${hashedPassword}, '${req.body.res_zip_code}', '${req.body.address}', '${req.body.phone_number}');`;
+  console.log(sql);
+  connection.query(sql, (err, result) => {
+    if (err) {
+      console.log(err);
+      res.writeHead(500, {
+        'Content-Type': 'text/plain'
+      });
+      res.end("Error in Data");
+    }
+    if (result && result.length > 0 && result[0][0].status === 'RESTAURANT_UPDATED') {
+      res.writeHead(200, {
+        'Content-Type': 'text/plain'
+      });
+      res.end(result[0][0].status);
+    }
+    else if (result && result.length > 0 && result[0][0].status === 'NO_RECORD') {
+      res.writeHead(401, {
+        'Content-Type': 'text/plain'
+      });
+      res.end(result[0][0].status);
+    }
+  });
+});
+
+app.get('/events', function(request, response) {
 
   var events = "select * from Events where Events.Event_ID ='"+ request.params.id+"'";
 
@@ -323,10 +839,33 @@ app.post('/:user_id/contactInfo/', (req, res) => {
   });
 });
 
-app.get('/restaurants/:search_input', (req, res) => {
 
+app.get('/getRestuarantDetails/:id', (req, res)=>{
+  let sql = "select * from restaurants where res_id ="+ req.params.id
+  connection.query(sql, (err, result) => {
+    if (err) {
+      res.writeHead(500, {
+        'Content-Type': 'text/plain'
+      });
+
+      console.log("error in data ", err)
+      res.end("Error in Data", err);
+    }
+    if (result && result.length > 0) {
+      res.writeHead(200, {
+        'Content-Type': 'text/plain'
+      });
+      res.end(JSON.stringify(result[0]));
+    }
+  });
+})
+app.get('/searchrestaurants/:search_input', (req, res) => {
+
+
+  
   let sql = `CALL Search_Result_get('${req.params.search_input}');`;
   connection.query(sql, (err, result) => {
+    console.log("error", err)
     if (err) {
       res.writeHead(500, {
         'Content-Type': 'text/plain'
@@ -344,7 +883,7 @@ app.get('/restaurants/:search_input', (req, res) => {
   });
 });
 
-app.get('/items/:res_id', (req, res) => {
+app.get('items/:res_id', (req, res) => {
   let sql = `CALL Menu_Items_get(${req.params.res_id}, NULL);`;
   connection.query(sql, (err, result) => {
     if (err) {
@@ -362,26 +901,7 @@ app.get('/items/:res_id', (req, res) => {
   });
 });
 
-app.get('/sections/:user_id', (req, res) => {
-  let sql = `CALL Menu_Sections_get(NULL, ${req.params.user_id});`;
-  connection.query(sql, (err, result) => {
-    if (err) {
-      res.writeHead(500, {
-        'Content-Type': 'text/plain'
-      });
-      console.log(err);
-      res.end("Database Error", err);
-    }
-    if (result && result.length > 0 && result[0][0]) {
-      console.log(err);
-      res.writeHead(200, {
-        'Content-Type': 'text/plain'
-        
-      });
-      res.end(JSON.stringify(result[0]));
-    }
-  });
-});
+
 
 app.get('/sectionitem/:menu_section_id', (req, res) => {
   let sql = `CALL Menu_Sections_Record_get(${req.params.menu_section_id});`;
@@ -404,7 +924,6 @@ app.get('/sectionitem/:menu_section_id', (req, res) => {
 
 
 
-
-
-
 app.listen(3001, ()=> console.log(`app listening on port 3001`));
+
+module.exports = app;

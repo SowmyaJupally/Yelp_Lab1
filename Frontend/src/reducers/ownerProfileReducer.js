@@ -1,17 +1,18 @@
-import { GET_CUSTOMER, UPDATE_CUSTOMER } from '../actions/types';
+import { GET_OWNER, UPDATE_OWNER } from '../actions/types';
 
  const initialState = {
-     user: {}
+     user: {},
+     item: {}
  };
 
  export default function(state = initialState, action){
     switch(action.type){
-        case GET_CUSTOMER:
+        case GET_OWNER:
             return {
                 ...state,
                 user: action.payload
             };
-        case UPDATE_CUSTOMER:
+        case UPDATE_OWNER:
             return {
                 ...state,
                 user: action.payload

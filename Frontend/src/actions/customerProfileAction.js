@@ -1,84 +1,34 @@
-import {
-    GET_CUSTOMER_DETAILS,
-    UPDATE_CUSTOMER_BASIC_DETAILS,
-    UPDATE_ABOUT_ME,
-    UPDATE_CONTACT_INFO,
-  } from './types';
-  //import connectionServer from '../webConfig';
-  import axios from 'axios';
-  
-  export const getCustomerDetails = () => (dispatch) => {
-    axios
-      .get(
-        `http://localhost:3001/userdetails/${localStorage.getItem(
-          'user_id',
-        )}`,
-      )
-      .then((response) =>
-        dispatch({
-          type: GET_CUSTOMER_DETAILS,
-          payload: response.data,
-        }),
-      )
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-  
-  export const updateCustomerBasicDetails = (customerData) => (dispatch) => {
-    axios
-      .post(
-        `http://localhost:3001/userdetails/${localStorage.getItem(
-          'user_id',
-        )}`,
-        customerData,
-      )
-      .then((response) =>
-        dispatch({
-          type: UPDATE_CUSTOMER_BASIC_DETAILS,
-          payload: response.data,
-        }),
-      )
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-  
-  export const updateAboutMe = (customerData) => (dispatch) => {
-    axios
-      .post(
-        `$http://localhost:3001/userdetails/${localStorage.getItem(
-          'user_id',
-        )}/aboutme`,
-        customerData,
-      )
-      .then((response) =>
-        dispatch({
-          type: UPDATE_ABOUT_ME,
-          payload: response.data,
-        }),
-      )
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-  
-  export const updateContactInfo = (customerData) => (dispatch) => {
-    axios
-      .post(
-        `http://localhost:3001/userdetails/${localStorage.getItem(
-          'user_id',
-        )}/contactInfo`,
-        customerData,
-      )
-      .then((response) =>
-        dispatch({
-          type: UPDATE_CONTACT_INFO,
-          payload: response.data,
-        }),
-      )
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-  
+import { GET_CUSTOMER, UPDATE_CUSTOMER } from "./types";
+import backendServer from "../webconfig"
+import axios from "axios";
+
+export const getCustomer = () => dispatch => {
+    axios.get(`${backendServer}/customer/${localStorage.getItem("user_id")}`)
+        .then(response => response.data[0])
+        .then(customer => dispatch({
+            type: GET_CUSTOMER,
+            payload: customer
+        }))
+        .catch(error => {
+            console.log(error);
+        });
+}
+
+export const updateCustomer = (customerProfileData) => dispatch => {
+    axios.defaults.withCredentials = true;
+    axios.post(`${backendServer}/customer`, customerProfileData)
+        .then(response => response.data)
+        .then(data => {
+            if (data === 'CUSTOMER_UPDATED') {
+                localStorage.setItem("name", customerProfileData.name);
+                alert("Profile Updated Successfully!");
+            }
+            return dispatch({
+                type: UPDATE_CUSTOMER,
+                payload: data
+            })
+        })
+        .catch(error => {
+            console.log(error);
+        });
+}

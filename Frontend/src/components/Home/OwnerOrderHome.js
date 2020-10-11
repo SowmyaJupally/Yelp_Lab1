@@ -14,7 +14,7 @@ class OwnerOrderHome extends Component {
     }
 
     getPendingOrders = () => {
-        axios.get(`${backendServer}/pendingorders/${localStorage.getItem("user_id")}`)
+        axios.get(`${backendServer}/respendingorders/${localStorage.getItem("res-id")}`)
             .then(response => {
                 if (response.data[0]) {
                     this.setState({
@@ -32,7 +32,7 @@ class OwnerOrderHome extends Component {
     };
 
     getRestaurantProfile = () => {
-        axios.get(`${backendServer}/grubhub/profile/restaurant/${localStorage.getItem("user_id")}`)
+        axios.get(`${backendServer}restaurants/${localStorage.getItem("user_id")}`)
         .then(response => {
             if(response.data[0]){
                 this.setState({
@@ -142,10 +142,10 @@ class OwnerOrderHome extends Component {
                                         <Card.Text>{order.order_date}</Card.Text>
                                     </Col>
                                     <Col align="center">
-                                        <Link to={{ pathname: "/orders/details", state: {order_details: order, prevPath: "/home"} }}>
+                                        <Link to={{ pathname: "/orderdetails", state: {order_details: order, prevPath: "/home"} }}>
                                             <Button variant="link">Order Details</Button>
                                         </Link>
-                                        <Link to={{ pathname: "/orders/billing", state: {order_details: order, prevPath: "/home"}}}>
+                                        <Link to={{ pathname: "/orderbilling", state: {order_details: order, prevPath: "/home"}}}>
                                             <Button variant="link">Billing Details</Button>
                                         </Link>
                                     </Col>
@@ -173,6 +173,7 @@ class OwnerOrderHome extends Component {
                     {message}
                     {orderCards}
                 </Container>
+                <a href = "/menu">menu</a>
             </div>
         )
     }

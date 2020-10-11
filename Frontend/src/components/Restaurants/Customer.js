@@ -18,7 +18,7 @@ class CustomerRestaurant extends Component {
     }
 
     componentDidMount() {
-        axios.get(`${backendServer}/restaurants/_`)
+        axios.get(`${backendServer}/searchrestaurants/_`)
             .then(response => {
                 var cuisines = [];
                 if (response.data) {
@@ -59,7 +59,7 @@ class CustomerRestaurant extends Component {
         e.preventDefault();
         if (this.state) {
             var searchInput = typeof this.state.search_input === "undefined" || this.state.search_input === "" ? "_" : this.state.search_input;
-            axios.get(`${backendServer}/restaurants/${searchInput}`)
+            axios.get(`${backendServer}/searchrestaurants/${searchInput}`)
                 .then(response => {
                     var cuisines = [];
                     if (response.data) {

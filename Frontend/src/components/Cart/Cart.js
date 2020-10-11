@@ -31,7 +31,7 @@ class Cart extends Component {
         let res_id;
         if (localStorage.getItem("cart_res_id")) {
             res_id = localStorage.getItem("cart_res_id");
-            axios.get(`${backendServer}/restaurants/${res_id}`)
+            axios.get(`${backendServer}/getRestuarantDetails/${res_id}`)
                 .then(response => {
                     if (response.data) {
                         this.setState({
@@ -107,7 +107,7 @@ class Cart extends Component {
 
         if (this.state && this.state.restaurant) {
             resName = this.state.restaurant.res_name;
-            resAddress = this.state.restaurant.address;
+            resAddress = this.state.restaurant.resAddress;
             resZIP = this.state.restaurant.res_zip_code;
         }
 

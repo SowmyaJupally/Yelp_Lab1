@@ -47,6 +47,8 @@ class ItemCard extends Component {
       cartItems.push(...JSON.parse(localStorage.getItem("cart_items")));
     }
 
+    localStorage.setItem("res_id", this.props.res_id);
+
     let index = cartItems.findIndex((cartItem => cartItem.item_id === item_id));
     if (index === -1) {
       cartItems.push({ item_id: item_id, item_quantity: this.state.item_quantity || 1, item_price: this.props.menu_item.item_price, item_name: this.props.menu_item.item_name });
@@ -135,7 +137,7 @@ class ItemCard extends Component {
             <Button variant="secondary" onClick={this.onClose}>
               Close
             </Button>
-            <Button variant="primary" onClick={this.addToCart}>
+            <Button variant="primary" hidden = "true" onClick={this.addToCart}>
               Add to Cart
             </Button>
           </Modal.Footer>

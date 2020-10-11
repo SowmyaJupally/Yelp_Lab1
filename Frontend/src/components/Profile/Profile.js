@@ -1,21 +1,21 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router';
 import Navigationbar from '../Navigationbar';
-import CustomerHome from './CustomerHome.js';
-import OwnerHome from './OwnerHome.js';
+import CustomerProfile from './CustomerProfile';
+import OwnerProfile from './OwnerProfile';
 
-class Home extends Component {
+class Profile extends Component {
     componentWillMount(){
-        document.title = "Yelp | Food Delivery | Order Food online";
+        document.title = "Your Profile";
     }
     render() {
-        let homeComponent = null;
+        let profileComponent = null;
         let redirectVar = null;
         if (localStorage.getItem("user_id")) {
             if (localStorage.getItem("is_owner") === "1")
-                homeComponent = <OwnerHome />
+                profileComponent = <OwnerProfile />
             else
-                homeComponent = <CustomerHome />
+                profileComponent = <CustomerProfile />
         }
         else {
             redirectVar = <Redirect to="/" />
@@ -23,11 +23,10 @@ class Home extends Component {
         return (
             <div>
                 {redirectVar}
-               
-                {homeComponent}
+                <Navigationbar /><br />
+                {profileComponent}
             </div>
         )
     }
 }
-//export Login Component
-export default Home;
+export default Profile;

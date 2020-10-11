@@ -101,6 +101,8 @@ class OwnerHome extends Component{
             redirectVar = <Redirect to= "/ownerhome"/>
         }
 
+        
+
         if(this.state.restFlag === true){
             redirectVar = <Redirect to ="/ownerorderhome"/>
         }
@@ -114,6 +116,7 @@ class OwnerHome extends Component{
                     <div class="main-div">
                         <div class="panel">
                             <h2>Register Your Restaurant</h2>
+                            <p>Already Registered ? <a href="/ownerorderhome"> Go to home</a></p>
                             <p>Please enter details about your restaurant</p>
                         </div>
                             <div class="form-group">

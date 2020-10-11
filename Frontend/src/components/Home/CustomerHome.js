@@ -142,7 +142,7 @@ class CustomerHome extends Component {
                     <i className='far fa-user'></i>
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
-                    <Dropdown.Item href='/userdetails'>
+                    <Dropdown.Item href='/profile'>
                       <span className='mr-2'>
                         <i className='far fa-user'></i>
                       </span>
