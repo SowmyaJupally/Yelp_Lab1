@@ -50,7 +50,7 @@ class Navigationbar extends Component {
           <Dropdown.Item><Link to="/ownerprofile" class="nav-link"><img src={userIcon} width="20" height="auto" class="d-inline-block align-top" alt="" />&nbsp;&nbsp;Profile</Link></Dropdown.Item>
           <Dropdown.Item><Link to="/menu" class="nav-link"><img src={userIcon} width="20" height="auto" class="d-inline-block align-top" alt="" />&nbsp;&nbsp;Menu</Link></Dropdown.Item>
           <Dropdown.Item><Link to="/createevents" class="nav-link"><img src={userIcon} width="20" height="auto" class="d-inline-block align-top" alt="" />&nbsp;&nbsp;Events</Link></Dropdown.Item>
-          <Dropdown.Item><Link to="/orders/history" class="nav-link"><img src={historyIcon} width="20" height="auto" class="d-inline-block align-top" alt="" />&nbsp;&nbsp;Past Orders</Link></Dropdown.Item>
+          <Dropdown.Item><Link to="/orderhistory" class="nav-link"><img src={historyIcon} width="20" height="auto" class="d-inline-block align-top" alt="" />&nbsp;&nbsp;Past Orders</Link></Dropdown.Item>
           {pendingOrders}
           <Dropdown.Item><Link to="/RestaurantEvents" class="nav-link"><img src={userIcon} width="20" height="auto" class="d-inline-block align-top" alt="" />&nbsp;&nbsp;Existing Events</Link></Dropdown.Item>
           
