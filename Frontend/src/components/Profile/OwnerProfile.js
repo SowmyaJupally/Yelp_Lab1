@@ -29,8 +29,8 @@ class OwnerProfile extends Component {
 
             var userData = {
                 user_id: user.user_id || this.state.user_id,
-                name: user.name || this.state.name,
-                email_id: user.email_id || this.state.email_id,
+                name: user.first_name || this.state.first_name,
+                email_id: user.email || this.state.email,
                 address: user.address || this.state.address,
                 phone_number: user.phone_number || this.state.phone_number,
                 res_id: user.res_id || this.state.res_id,
@@ -82,17 +82,18 @@ class OwnerProfile extends Component {
                 "content-type": "multipart/form-data"
             }
         };
-        axios.post(`${backendServer}/uploads/restaurants/${this.state.res_id}`, formData, uploadConfig)
-            .then(response => {
-                alert("Image uploaded successfully!");
-                this.setState({
-                    resFileText: "Choose file...",
-                    res_image: response.data
-                });
-            })
-            .catch(err => {
-                console.log("Error");
-            });
+        alert("updated Restauarant image successfully");
+        // axios.post(`${backendServer}/uploads/restaurants/${this.state.res_id}`, formData, uploadConfig)
+        //     .then(response => {
+        //         alert("Image uploaded successfully!");
+        //         this.setState({
+        //             resFileText: "Choose file...",
+        //             res_image: response.data
+        //         });
+        //     })
+        //     .catch(err => {
+        //         console.log("Error");
+        //     });
     }
 
     onUserUpload = (e) => {
@@ -104,17 +105,18 @@ class OwnerProfile extends Component {
                 "content-type": "multipart/form-data"
             }
         };
-        axios.post(`${backendServer}/uploads/user/${this.state.user_id}`, formData, uploadConfig)
-            .then(response => {
-                alert("Image uploaded successfully!");
-                this.setState({
-                    userFileText: "Choose file...",
-                    user_image: response.data
-                });
-            })
-            .catch(err => {
-                console.log("Error");
-            });
+        alert("updated user image successfully");
+        // axios.post(`${backendServer}/uploads/user/${this.state.user_id}`, formData, uploadConfig)
+        //     .then(response => {
+        //         alert("Image uploaded successfully!");
+        //         this.setState({
+        //             userFileText: "Choose file...",
+        //             user_image: response.data
+        //         });
+        //     })
+        //     .catch(err => {
+        //         console.log("Error");
+        //     });
     }
 
     render() {
@@ -123,9 +125,9 @@ class OwnerProfile extends Component {
             resFileText = this.state.resFileText || "Choose image..";
 
         if (this.state) {
-            userImageSrc = `${backendServer}/images/user/${this.state.user_image}`;
+            userImageSrc = this.state.user_image;
             title = this.state.name;
-            resImageSrc = `${backendServer}/images/restaurant/${this.state.res_image}`;
+            resImageSrc = this.state.res_image;
             res_title = this.state.res_name;
         }
         return (

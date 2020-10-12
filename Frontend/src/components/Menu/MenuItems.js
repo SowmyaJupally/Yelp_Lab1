@@ -3,6 +3,7 @@ import { Form, Col, Row, Button, Alert, Card } from "react-bootstrap";
 import { Redirect } from "react-router";
 import axios from "axios";
 import backendServer from "../../webconfig"
+//import { addListener } from "../../../../Backend";
 
 class MenuItems extends Component {
     constructor(props) {
@@ -25,7 +26,7 @@ class MenuItems extends Component {
     };
 
     getSections = () => {
-        axios.get(`${backendServer}/grubhub/menu/sections/${localStorage.getItem("user_id")}`)
+        axios.get(`${backendServer}/sections/${localStorage.getItem("user_id")}`)
             .then(response => {
                 if (response.data[0]) {
                     this.setState({
@@ -51,7 +52,7 @@ class MenuItems extends Component {
             item_image: this.state.item_image
         };
 
-        axios.post(`${backendServer}/grubhub/menu/items`, data)
+        axios.post(`${backendServer}/items`, data)
             .then(response => {
                 this.setState({
                     message: response.data.status
@@ -74,25 +75,8 @@ class MenuItems extends Component {
     }
 
     onUpload = (e) => {
-        e.preventDefault();
-        const formData = new FormData();
-        formData.append("itemimage", this.state.file);
-        const uploadConfig = {
-            headers: {
-                "content-type": "multipart/form-data"
-            }
-        };
-        axios.post(`${backendServer}/item/${this.state.item_id}`, formData, uploadConfig)
-            .then(response => {
-                alert("Image uploaded successfully!");
-                this.setState({
-                    fileText: "Choose file...",
-                    item_image: response.data
-                });
-            })
-            .catch(err => {
-                console.log("Error");
-            });
+     console.log("image ")
+     alert("image uplaoded successfully");
     }
 
     render() {
@@ -116,7 +100,7 @@ class MenuItems extends Component {
         var imageSrc,
             fileText = this.state.fileText || "Choose image..";
         if (this.state) {
-            imageSrc = `${backendServer}/grubhub/images/item/${this.state.item_image}`;
+            imageSrc =this.state.item_image;
         }
         return (
             <div>

@@ -39,6 +39,7 @@ class CustomerHome extends Component {
   handleLogout = () => {
     cookie.remove('cookie', { path: '/' })
     console.log("logout done")
+    localStorage.clear()
     this.setState({
       a:"a"
     })

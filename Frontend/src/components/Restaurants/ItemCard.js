@@ -83,7 +83,7 @@ class ItemCard extends Component {
 
 
   render() {
-      let imageSrc = "";
+      let imageSrc = this.props.menu_item.item_image;
     //let imageSrc = `${backendServer}/grubhub/images/item/${this.props.menu_item.item_image}`;
     let buttonText = "Add to Cart";
     let buttonVariant = "primary";

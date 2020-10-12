@@ -6,7 +6,7 @@ import backendServer from "../../webconfig";
 class RestaurantCard extends Component {
     render() {
       var resData = this.props.restaurant;
-      let imageSrc = "";
+      let imageSrc = resData.res_image;
       return (
         <Link to={{pathname: '/restaurantmenu', state: resData}}>
         <Card bg="white" style={{ width: "18rem", margin: "5%" }}>

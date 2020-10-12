@@ -12,7 +12,7 @@ class OwnerOrderHistory extends Component {
     }
 
     getCompletedOrders = () => {
-        axios.get(`${backendServer}/grubhub/orders/completedorders/restaurant/${localStorage.getItem("user_id")}`)
+        axios.get(`${backendServer}/completedorders/${localStorage.getItem("user_id")}`)
             .then(response => {
                 if (response.data[0]) {
                     this.setState({

@@ -3,7 +3,7 @@ import backendServer from "../webconfig"
 import axios from "axios";
 
 export const getOwner = () => dispatch => {
-    axios.get(`${backendServer}/profile/restaurants/${localStorage.getItem("user_id")}`)
+    axios.get(`${backendServer}/restaurants/${localStorage.getItem("user_id")}`)
         .then(response => response.data[0])
         .then(owner => dispatch({
             type: GET_OWNER,
@@ -16,7 +16,7 @@ export const getOwner = () => dispatch => {
 
 export const updateOwner = (ownerProfileData) => dispatch => {
     axios.defaults.withCredentials = true;
-    axios.post(`${backendServer}/profile/restaurants`, ownerProfileData)
+    axios.post(`${backendServer}/restaurants`, ownerProfileData)
         .then(response => response.data)
         .then(data => {
             if (data === 'RESTAURANT_UPDATED') {

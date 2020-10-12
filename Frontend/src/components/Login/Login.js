@@ -96,6 +96,9 @@ class Login extends Component{
         if(this.props.user && this.props.user.user_id){
             localStorage.setItem("user_id", this.props.user.user_id);
             localStorage.setItem("is_owner", this.props.user.is_owner)
+            if(this.props.user.is_owner){
+                localStorage.setItem("loggedinRestId", this.props.user.restaurantId)
+            }
         }
 
         if(this.state.authFlag===2)

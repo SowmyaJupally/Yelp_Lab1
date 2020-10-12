@@ -46,6 +46,7 @@ class Main extends Component{
             <Route path = "/menu" component = {Menu}/>
             <Route path = "/cart" component = {Cart}/>
             <Route path="/profile" component={Profile} />
+            <Route path="/ownerprofile" component={Profile} />
 
             </div>
             </Provider>

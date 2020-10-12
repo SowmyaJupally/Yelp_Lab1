@@ -99,7 +99,7 @@ class Restaurant extends Component {
         }
 
         if (restaurant) {
-
+            resImageSrc = restaurant.res_image
             //resImageSrc = `${backendServer}/grubhub/images/restaurant/${restaurant.res_image}`;
             resName = restaurant.res_name;
             resAddress = restaurant.res_address;

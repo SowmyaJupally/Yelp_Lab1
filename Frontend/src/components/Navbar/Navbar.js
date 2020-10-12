@@ -26,6 +26,7 @@ class Navbar extends Component{
 
     handleLogout=() => {
         cookie.remove('cookie',{path:'/'})
+        localStorage.clear()
         console.log("logout done")
     }
     

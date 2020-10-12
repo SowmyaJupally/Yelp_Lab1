@@ -144,7 +144,7 @@ app.get('/pendingorders/:user_id', (req, res) => {
   let sql = `CALL Pending_Orders_get(${req.params.user_id});`;
   connection.query(sql, (err, result) => {
 
-    console.log(" error and result:", err,result);
+    //console.log(" error and result:", err,result);
     if (err) {
       res.writeHead(500, {
         'Content-Type': 'text/plain'
@@ -172,7 +172,7 @@ app.get('/respendingorders/:user_id', (req, res) => {
   let sql = `CALL Res_Pending_Orders_get(${req.params.user_id});`;
   connection.query(sql, (err, result) => {
 
-    console.log(" error and result:", err,result);
+    //console.log(" error and result:", err,result);
     if (err) {
       res.writeHead(500, {
         'Content-Type': 'text/plain'
@@ -440,6 +440,7 @@ app.get('/items/:user_id', (req, res) => {
       res.writeHead(500, {
         'Content-Type': 'text/plain'
       });
+      console.log("database error", err)
       res.end("Database Error");
     }
     if (result && result.length > 0 && result[0][0]) {
@@ -470,7 +471,9 @@ app.get('/menuitem/:item_id', (req, res) => {
 });
 
 app.post('/items', (req, res) => {
-  let sql = `CALL Menu_Items_put(${req.body.user_id}, NULL, '${req.body.item_name}', '${req.body.item_description}', ${req.body.item_price}, '${req.body.item_image}', NULL, '${req.body.menu_section_name}');`;
+
+  let image_path = "https://image.shutterstock.com/image-photo/walnut-pistachio-turkish-style-antep-600w-1222454869.jpg"
+  let sql = `CALL Menu_Items_put(${req.body.user_id}, NULL, '${req.body.item_name}', '${req.body.item_description}', ${req.body.item_price}, '${image_path}', NULL, '${req.body.menu_section_name}');`;
   connection.query(sql, (err, result) => {
     if (err) {
       console.log(err);
@@ -574,31 +577,44 @@ app.post('/reviews', function(request, response) {
 }});
 
 
-app.post('/login', function(request, response) {
+app.post('/login', async function(request, response) {
 	var email = request.body.email;
   var password = request.body.password;
   let user_id;
-    
+  let restaurantId;
     console.log(email);
     console.log(password);
 	if (email && password) {
-		connection.query('SELECT * FROM Users WHERE email = ? AND password = ?', [email, password], function(error, results, fields) {
+		await connection.query('SELECT * FROM Users WHERE email = ? AND password = ?', [email, password],async function(error, results, fields) {
 			if (results.length > 0) {
         request.session.loggedin = true;
         response.cookie('cookie',results[0].email,{maxAge: 900000, httpOnly: false, path : '/'});
         //request.session.email = email;
-
-        user_id = results[0].user_id ;
-        is_owner = results[0].is_owner;
+        
+        user_id = await results[0].user_id ;
+        is_owner = await results[0].is_owner;
         console.log("user_id:",user_id);
         console.log("is_owner:", is_owner);
         console.log("after query");
-				response.writeHead(200, {
-					'Content-Type': 'text/plain'
+				
+         if(is_owner){
+          connection.query("SELECT * FROM restaurants WHERE user_id = "+ user_id, async function(error, results, fields) {
+            console.log("results: ", results[0])
+            if (results.length > 0) {
+              console.log("lengfh", results[0].res_id)
+              restaurantId = await results[0].res_id ;
+            }
         })
-        
+      }
 
-        var result = {user_id: user_id, is_owner:is_owner, succesfulLogin:true}
+      await new Promise(resolve => {
+        setTimeout(resolve, 1000)
+      })
+      response.writeHead(200, {
+        'Content-Type': 'text/plain'
+      })
+        var result = {user_id: user_id, is_owner:is_owner, succesfulLogin:true, restaurantId:restaurantId}
+        console.log(result);
 				response.end( JSON.stringify(result));
 			} 
 			else
@@ -616,7 +632,7 @@ app.post('/register', function(request, response) {
   var Birthday = request.body.Birthday;
   var is_owner = request.body.is_owner;
   var is_owner_Value
-  
+  console.log("is_owner: ", request.body.is_owner)
   if (is_owner == "Customer"){
     is_owner_Value = 0
   }
@@ -706,6 +722,7 @@ app.get('/restaurants/:user_id', (req, res) => {
       res.writeHead(500, {
         'Content-Type': 'text/plain'
       });
+      console.log("error in error",err)
       res.end("Error in Data");
     }
     if (result && result.length > 0 && result[0][0]) {

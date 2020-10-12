@@ -91,7 +91,8 @@ class Register extends Component{
             firstName : this.state.firstName,
             lastName : this.state.lastName,
             ZIP_Code : this.state.ZIP_Code,
-            Birthday : this.state.Birthday
+            Birthday : this.state.Birthday,
+            is_owner: this.state.is_owner
 
         }
         if(this.state.email == "" || this.state.password == "" || this.state.firstName == "" || this.state.lastName == "" || this.state.Birthday == ""){
@@ -105,36 +106,7 @@ class Register extends Component{
         this.setState({
             signupFlag: 1
         });
-        /*else{
-        //set the with credentials to true
-        axios.defaults.withCredentials = true;
-        //make a post request with the user data
-        axios.post('http://localhost:3001/register',data)
-            .then(response => {
-                console.log("Status Code : ",response.status);
-                if(response.status === 200){
-                    this.setState({
-                        registerFlag : true
-                    })
-                }else{
-                    this.setState({
-                        registerFlag : false
-                    })
-                }
-                if(response.data==="error")
-                {
-                    this.setState({registerFlag : 2})
-                }
-    
-            })
-            .catch((err)=>{
-                if(err){
-                    this.setState({
-                        errorRedirect: true
-                    });
-                }
-            }  ) 
-    }*/
+        
     }
     render(){
         //redirect based on successful login

@@ -21,7 +21,7 @@ class OrderItemsView extends Component {
                 prevPath: this.props.location.state.prevPath
             });
 
-            axios.get(`${backendServer}/grubhub/orders/orderitems/${this.props.location.state.order_details.order_id}`)
+            axios.get(`${backendServer}/orderitems/${this.props.location.state.order_details.order_id}`)
                 .then(response => {
                     if (response.data[0]) {
                         this.setState({

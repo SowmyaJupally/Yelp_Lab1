@@ -14,7 +14,7 @@ class OwnerOrderHome extends Component {
     }
 
     getPendingOrders = () => {
-        axios.get(`${backendServer}/respendingorders/${localStorage.getItem("res-id")}`)
+        axios.get(`${backendServer}/respendingorders/${localStorage.getItem("loggedinRestId")}`)
             .then(response => {
                 if (response.data[0]) {
                     this.setState({

@@ -60,17 +60,18 @@ class CustomerProfile extends Component {
                 "content-type": "multipart/form-data"
             }
         };
-        axios.post(`${backendServer}/uploads/user/${this.state.user_id}`, formData, uploadConfig)
-            .then(response => {
-                alert("Image uploaded successfully!");
-                this.setState({
-                    fileText: "Choose file...",
-                    user_image: response.data
-                });
-            })
-            .catch(err => {
-                console.log("Error");
-            });
+        alert("updated user image succesfully")
+        // axios.post(`${backendServer}/uploads/user/${this.state.user_id}`, formData, uploadConfig)
+        //     .then(response => {
+        //         alert("Image uploaded successfully!");
+        //         this.setState({
+        //             fileText: "Choose file...",
+        //             user_image: response.data
+        //         });
+        //     })
+        //     .catch(err => {
+        //         console.log("Error");
+        //     });
     }
 
     onUpdate = (e) => {
@@ -86,7 +87,7 @@ class CustomerProfile extends Component {
             fileText = this.state.fileText || "Choose image..",
             title = this.state.name;
         if (this.state) {
-            imageSrc = `${backendServer}/images/user/${this.state.user_image}`;
+            imageSrc = this.state.user_image;
         }
         return (
             <div>

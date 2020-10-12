@@ -25,10 +25,7 @@ class Navigationbar extends Component {
   handleLogout = () => {
     cookie.remove('cookie', { path: '/' })
     console.log("logout done")
-    localStorage.removeItem("res-id")
-    
-    localStorage.removeItem("user_id")
-    localStorage.removeItem("is_owner")
+    localStorage.clear()
     
     this.setState({
       a:"a"
