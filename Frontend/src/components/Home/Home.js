@@ -8,6 +8,7 @@ import OwnerOrderHome from './OwnerOrderHome.js';
 class Home extends Component {
     componentWillMount(){
         document.title = "Yelp | Food Delivery | Order Food online";
+        
     }
     render() {
         let homeComponent = null;
