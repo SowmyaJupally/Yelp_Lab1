@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { getOwner, updateOwner } from '../../actions/ownerProfileAction'
 import { Container, Col, Row, Form, Button, ButtonGroup, Card } from 'react-bootstrap';
 import backendServer from "../../webconfig";
+import Navigationbar from '../Navigationbar';
 
 class OwnerProfile extends Component {
     constructor(props) {
@@ -132,6 +133,7 @@ class OwnerProfile extends Component {
         }
         return (
             <div>
+            <Navigationbar/>
                 <Container fluid={true}>
                     <Row>
                         <Col xs={6} md={4}>

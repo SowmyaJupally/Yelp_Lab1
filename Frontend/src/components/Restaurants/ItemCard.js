@@ -104,6 +104,7 @@ class ItemCard extends Component {
 
     return (
       <div>
+      
         <Card bg="white" style={{ width: "50rem", margin: "2%" }}>
           <Row>
             <Col>
@@ -118,7 +119,7 @@ class ItemCard extends Component {
             </Col>
             <Col align="right">
               <br /><br />
-              <Button variant={buttonVariant} onClick={buttonClick} name={this.props.menu_item.item_id}>{buttonText}</Button>&nbsp; &nbsp;
+              <Button variant={buttonVariant} hidden = {localStorage.getItem("is_owner") == 1} onClick={buttonClick} name={this.props.menu_item.item_id}>{buttonText}</Button>&nbsp; &nbsp;
             </Col>
           </Row>
         </Card>
@@ -137,7 +138,7 @@ class ItemCard extends Component {
             <Button variant="secondary" onClick={this.onClose}>
               Close
             </Button>
-            <Button variant="primary" hidden = "true" onClick={this.addToCart}>
+            <Button variant="primary"  onClick={this.addToCart}>
               Add to Cart
             </Button>
           </Modal.Footer>

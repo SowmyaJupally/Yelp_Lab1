@@ -4,6 +4,7 @@ import axios from 'axios';
 import ItemCard from "./ItemCard"
 import { Button, Card, Container, Col, Row } from 'react-bootstrap';
 import backendServer from "../../webconfig";
+import Navigationbar from '../Navigationbar';
 
 class Restaurant extends Component {
     constructor(props) {
@@ -117,7 +118,7 @@ class Restaurant extends Component {
         return (
             <div>
                 {redirectVar}
-                
+                <Navigationbar/>
                 <Card bg="info" text="white" style={{ width: "70rem", height: "30rem", margin: "2%" }}>
                     <Row>
                         <Col>

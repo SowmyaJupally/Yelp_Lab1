@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router';
 import backendServer from "../../webconfig";
+import Navigationbar from '../Navigationbar';
 import { Button, Alert, Container, Table, Card } from "react-bootstrap";
 import axios from 'axios';
 
@@ -151,6 +152,7 @@ class ConfirmOrder extends Component {
         return (
             <div>
                 {redirectVar}
+                <Navigationbar/>
                 <Container>
                     <h3>Confirm your Order </h3>
                     <center>

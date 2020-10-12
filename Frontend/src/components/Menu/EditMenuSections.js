@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Form, Col, Row, Container, Button, Alert } from "react-bootstrap";
 import { Redirect } from "react-router";
 import backendServer from "../../webconfig";
+import Navigationbar from '../Navigationbar';
 import axios from "axios";
 
 class EditMenuSections extends Component {
@@ -88,6 +89,7 @@ class EditMenuSections extends Component {
         return (
             <div>
                 {redirectVar}
+                <Navigationbar/>
                 <Container className="justify-content">
                     <br />
                     <h3>Update Section</h3><br />

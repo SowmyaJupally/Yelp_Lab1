@@ -7,6 +7,7 @@ import logo from '../../yelp.png';
 import backendServer from '../../webconfig';
 import 'bootstrap/dist/css/bootstrap.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import Navigationbar from '../Navigationbar';
 import { Dropdown } from 'react-bootstrap';
 import { ThemeConsumer } from 'react-bootstrap/esm/ThemeProvider';
 
@@ -121,7 +122,7 @@ class CustomerHome extends Component {
     return (
       <div>
         {redirectVar}
-
+        <Navigationbar/>
         <React.Fragment>
           <div className='bg-overlay'>
             

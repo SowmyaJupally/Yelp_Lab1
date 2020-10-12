@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router';
 import backendServer from "../../webconfig"
-import { Button, Alert, Container, Table, Card, ListGroup, ListGroupItem} from "react-bootstrap";
+import Navigationbar from '../Navigationbar';
+import { Button, Alert, Container, Table, Card, ListGroup, ListGroupItem, Nav} from "react-bootstrap";
 import { Link } from "react-router-dom";
 import axios from 'axios';
 
@@ -207,7 +208,7 @@ class Cart extends Component {
         return (
             <div>
                 {redirectVar}
-                
+                <Navigationbar/>
                 <Container>
                     <h3>Your Cart</h3><br />
                     <center>

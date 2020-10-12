@@ -23,7 +23,7 @@ class Profile extends Component {
         return (
             <div>
                 {redirectVar}
-                <Navigationbar /><br />
+               
                 {profileComponent}
             </div>
         )

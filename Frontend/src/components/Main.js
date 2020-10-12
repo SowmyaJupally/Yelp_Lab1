@@ -23,6 +23,8 @@ import { Provider } from "react-redux";
 import store from "../store";
 import RegisteredEvents from './Util/RegisteredEvents'
 import RestaurantEvents from './Util/RestaurantEvents'
+import EventUsers from './Util/EventUsers'
+import UserProfile from './Util/UserProfile';
 
 class Main extends Component{
     render(){
@@ -53,6 +55,8 @@ class Main extends Component{
             <Route path="/ownerprofile" component={Profile} />
             <Route path = "/registeredEvents" component = {RegisteredEvents}/>
             <Route path = "/RestaurantEvents" component = {RestaurantEvents}/>
+            <Route path ="/eventUsers/:id" component = {EventUsers}/>
+            <Route path ="/userProfile/:id" component = {UserProfile}/>
 
             </div>
             </Provider>

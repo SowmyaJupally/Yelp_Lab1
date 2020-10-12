@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Card, Container, Col, Row, Button, Alert } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import backendServer from "../../webconfig"
+import Navigationbar from '../Navigationbar';
 
 class CustomerOrderHistory extends Component {
     constructor(props) {
@@ -74,6 +75,7 @@ class CustomerOrderHistory extends Component {
         }
         return (
             <div>
+            <Navigationbar/>
                 <Container className="justify-content">
                     <h3>Your past orders</h3>
                     {message}

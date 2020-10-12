@@ -2,8 +2,8 @@ import { GET_CUSTOMER, UPDATE_CUSTOMER } from "./types";
 import backendServer from "../webconfig"
 import axios from "axios";
 
-export const getCustomer = () => dispatch => {
-    axios.get(`${backendServer}/customer/${localStorage.getItem("user_id")}`)
+export const getCustomer = (id) => dispatch => {
+    axios.get(`${backendServer}/customer/${id}`)
         .then(response => response.data[0])
         .then(customer => dispatch({
             type: GET_CUSTOMER,

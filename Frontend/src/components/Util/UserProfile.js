@@ -6,12 +6,14 @@ import backendServer from "../../webconfig";
 import { getCustomer, updateCustomer } from '../../actions/customerProfileAction'
 import { Link } from "react-router-dom";
 import { Container, Col, Row, Form, Button, ButtonGroup, Card } from 'react-bootstrap';
-import Navigationbar from '../Navigationbar';
 
-class CustomerProfile extends Component {
+class UserProfile extends Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            user_id: this.props.match.params.id
+        };
+        
         this.onChange = this.onChange.bind(this);
         this.onImageChange = this.onImageChange.bind(this);
         this.onUpdate = this.onUpdate.bind(this);
@@ -19,7 +21,7 @@ class CustomerProfile extends Component {
     }
 
     componentWillMount() {
-        this.props.getCustomer(localStorage.getItem("user_id"));
+        this.props.getCustomer(this.state.user_id);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -92,7 +94,6 @@ class CustomerProfile extends Component {
         }
         return (
             <div>
-            <Navigationbar/>
                 <Container fluid={true}>
                     <Row>
                         <Col xs={6} md={4}>
@@ -103,28 +104,21 @@ class CustomerProfile extends Component {
                                         <Card.Title><h3>{title}</h3></Card.Title>
                                     </Card.Body>
                                 </Card>
-                                <form onSubmit={this.onUpload}><br /><br /><br />
-                                    <div class="custom-file" style={{width: "80%"}}>
-                                        <input type="file" class="custom-file-input" name="image" accept="image/*" onChange={this.onImageChange} required/>
-                                        <label class="custom-file-label" for="image">{fileText}</label>
-                                    </div><br/><br/>
-                                    <Button type="submit" variant="primary">Upload</Button>
-                                </form>
                             </center>
                         </Col>
                         <Col>
                             <h4>Profile</h4>
                             <br />
-                            <Form onSubmit={this.onUpdate} >
+                            <Form  >
                                 <Form.Row>
                                     <Form.Group as={Col} controlId="name">
                                         <Form.Label>Name</Form.Label>
                                         <Form.Control name="name"
                                             type="text"
-                                            onChange={this.onChange}
-                                            value={this.state.first_name}
+                                           
+                                            defaultValue={this.state.first_name}
                                             pattern="^[A-Za-z0-9 ]+$"
-                                            required={true} />
+                                            required={true} disabled />
                                     </Form.Group>
                                 </Form.Row>
 
@@ -133,17 +127,8 @@ class CustomerProfile extends Component {
                                         <Form.Label>Email</Form.Label>
                                         <Form.Control type="email"
                                             name="email_id"
-                                            value={this.state.email}
+                                            defaultValue={this.state.email}
                                             disabled />
-                                    </Form.Group>
-                                </Form.Row>
-                                <Form.Row>
-                                    <Form.Group as={Col} controlId="RB.password">
-                                        <Form.Label>Change Password</Form.Label>
-                                        <Form.Control type="password"
-                                            name="password"
-                                            onChange={this.onChange}
-                                            placeholder="New Password" />
                                     </Form.Group>
                                 </Form.Row>
 
@@ -152,10 +137,10 @@ class CustomerProfile extends Component {
                                         <Form.Label>Address</Form.Label>
                                         <Form.Control type="text"
                                             name="address"
-                                            onChange={this.onChange}
-                                            value={this.state.address}
+                                            
+                                            deafultValue={this.state.address}
                                             pattern="^[A-Za-z0-9 ,-]+$"
-                                            required={true} />
+                                            required={true} disabled/>
                                     </Form.Group>
                                 </Form.Row>
                                 <Form.Row>
@@ -163,21 +148,15 @@ class CustomerProfile extends Component {
                                         <Form.Label>Phone Number</Form.Label>
                                         <Form.Control type="text"
                                             name="phone_number"
-                                            onChange={this.onChange}
-                                            value={this.state.phone_number}
+                                           
+                                            defaultValue={this.state.phone_number}
                                             required={true}
-                                            pattern="^[0-9]+$"
+                                            pattern="^[0-9]+$" disabled
                                         />
                                     </Form.Group>
                                 </Form.Row>
-                                <ButtonGroup aria-label="Third group">
-                                    <Button type="submit" variant="success">Update Details</Button>
-                                </ButtonGroup>
-                                {"  "}
-                                <ButtonGroup aria-label="Fourth group">
-                                    <Link to="/home"><Button variant="secondary">Cancel</Button></Link>
-                                </ButtonGroup>
-                            </Form>
+                                
+                                </Form>
                         </Col>
                     </Row><br/>
                     <center><Button href="/home">Home</Button></center>
@@ -187,7 +166,7 @@ class CustomerProfile extends Component {
     }
 }
 
-CustomerProfile.propTypes = {
+UserProfile.propTypes = {
     getCustomer: PropTypes.func.isRequired,
     updateCustomer: PropTypes.func.isRequired,
     user: PropTypes.object.isRequired
@@ -197,4 +176,4 @@ const mapStateToProps = state => ({
     user: state.customerProfile.user
 });
 
-export default connect(mapStateToProps, { getCustomer, updateCustomer })(CustomerProfile);
+export default connect(mapStateToProps, { getCustomer, updateCustomer })(UserProfile);

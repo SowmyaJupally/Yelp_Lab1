@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import backendServer from "../../webconfig";
+import Navigationbar from '../Navigationbar';
 import { Card, Container, Col, Form, Row, Button, Alert } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
@@ -165,6 +166,8 @@ class OwnerOrderHome extends Component {
         }
         return (
             <div>
+            
+            <Navigationbar />
                 <Container className="justify-content">
                     <br/>
                     {restaurantDetails}
@@ -173,9 +176,7 @@ class OwnerOrderHome extends Component {
                     {message}
                     {orderCards}
                 </Container>
-                <a href = "/menu">menu</a>
-                <br></br>
-                <a href = "/createevents">Events</a>
+                
             </div>
         )
     }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router';
-
+import Navigationbar from '../Navigationbar';
 import CustomerOrderHistory from './CustomerOrderHistory';
 import OwnerOrderHistory from './OwnerOrderHistory';
 
@@ -23,7 +23,7 @@ class OrderHistory extends Component {
         return (
             <div>
                 {redirectVar}
-                
+                <Navigationbar/>
                 {ordersComponent}
             </div>
         )

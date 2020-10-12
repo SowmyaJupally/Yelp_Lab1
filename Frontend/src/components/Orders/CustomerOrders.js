@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Card, Container, Col, Row, Button, Alert } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import backendServer from "../../webconfig";
+import Navigationbar from '../Navigationbar';
 
 class CustomerOrders extends Component {
     constructor(props) {
@@ -120,7 +121,7 @@ class CustomerOrders extends Component {
         return (
             <div>
                 {redirectVar}
-                
+                <Navigationbar/>
                 <Container className="justify-content">
                     <h3>Your Pending Orders</h3><br />
                     {message}

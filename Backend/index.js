@@ -126,13 +126,13 @@ app.post('/ownerhome', (request, response) =>{
       response.end("error in ownerhome");
       }
     else{
-      console.log("restaurant added successfully");
+      console.log("restaurant added successfully", result.insertId);
       response.writeHead(200,{
         'Content-type': 'text/plain'
       })
 
     console.log('result:' ,result)
-        response.end("restaurant added succesfully");
+        response.end(JSON.stringify(result.insertId));
     }}
     )
 }});
@@ -383,6 +383,31 @@ app.get('/sections/:user_id', (req, res) => {
   });
 });
 
+
+app.get('/getEventUsers/:id', (req,response)=>{
+  var events = "select u.user_id,u.user_image,u.first_name from Users u join register_event_users reg on reg.user_id = u.user_id and reg.event_id = "+req.params.id;
+
+  var results;
+
+  connection.query(events, function(err, res, fields){
+    if(err){
+      response.writeHead(400,{
+        'Content-type':'text/plain'
+      })
+      console.log("res query error", err);
+    }
+    
+    else{
+      console.log("result", res)
+      response.writeHead(200,{
+        'Content-type':'text/plain'
+      })
+      
+      console.log("res query result: ", res);
+      response.end(JSON.stringify(res));
+    }
+  })
+})
 
 app.get('/getRestauarantEvents/:resId',(req,response)=>{
   var events = "select * from Events where res_id = "+req.params.resId;

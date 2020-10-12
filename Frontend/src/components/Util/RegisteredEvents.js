@@ -7,6 +7,7 @@ import backendServer from '../../webconfig';
 import logo from '../Images/yogaEvent.png';
 import 'bootstrap/dist/css/bootstrap.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import Navigationbar from '../Navigationbar';
 
 //Define a Login Component
 class RegisteredEvents extends Component{
@@ -114,6 +115,7 @@ class RegisteredEvents extends Component{
             })
         return(
             <div>
+            <Navigationbar/>
             {details}
             </div>
             

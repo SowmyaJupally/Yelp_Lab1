@@ -3,6 +3,7 @@ import { Redirect } from 'react-router';
 import { Button, Container, Table, Card } from "react-bootstrap";
 import axios from 'axios';
 import backendServer from "../../webconfig";
+import Navigationbar from '../Navigationbar';
 
 class OrderItemsView extends Component {
     constructor(props) {
@@ -106,6 +107,7 @@ class OrderItemsView extends Component {
                 <div>
                     
                     {redirectVar}
+                    <Navigationbar/>
                     <Container className="justify-content">
                         {itemsCard}
                     </Container>

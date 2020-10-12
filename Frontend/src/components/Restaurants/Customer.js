@@ -3,6 +3,8 @@ import axios from 'axios';
 import backendServer from "../../webconfig";
 import RestaurantCard from "./RestaurantCard";
 import { InputGroup, FormControl, Button, DropdownButton, Dropdown, Alert, Col, Row } from 'react-bootstrap';
+import Navigationbar from '../Navigationbar';
+
 
 class CustomerRestaurant extends Component {
     constructor(props) {
@@ -140,6 +142,7 @@ class CustomerRestaurant extends Component {
 
         return (
             <div>
+            <Navigationbar/>
                 <center><br /><br />
                     <h3>Search for restaurants with your favorite food!</h3>
                     <br />

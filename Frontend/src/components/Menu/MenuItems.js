@@ -3,6 +3,7 @@ import { Form, Col, Row, Button, Alert, Card } from "react-bootstrap";
 import { Redirect } from "react-router";
 import axios from "axios";
 import backendServer from "../../webconfig"
+import Navigationbar from '../Navigationbar';
 //import { addListener } from "../../../../Backend";
 
 class MenuItems extends Component {
@@ -105,6 +106,7 @@ class MenuItems extends Component {
         return (
             <div>
                 {redirectVar}
+                <Navigationbar/>
                 <Row>
                     <Col xs={6} md={4}>
                         <center>

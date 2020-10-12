@@ -6,6 +6,7 @@ import {Redirect} from 'react-router';
 import logo from '../../yelp.png';
 import 'bootstrap/dist/css/bootstrap.css';
 import backendServer from '../../webconfig';
+import Navigationbar from '../Navigationbar';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { Dropdown } from 'react-bootstrap';
 
@@ -115,6 +116,7 @@ class CreateEvents extends Component{
         return(
             <div>
                 {redirectVar}
+                <Navigationbar/>
                     <React.Fragment>
                     <div class="col-md-12 text-center">
                     <h2>Create an Event</h2>

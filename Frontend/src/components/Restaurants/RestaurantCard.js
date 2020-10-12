@@ -3,6 +3,7 @@ import { Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import backendServer from "../../webconfig";
 
+
 class RestaurantCard extends Component {
     render() {
       var resData = this.props.restaurant;

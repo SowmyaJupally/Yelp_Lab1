@@ -74,6 +74,7 @@ class OwnerHome extends Component{
             .then(response => {
                 console.log("Status Code : ",response.status);
                 if(response.status === 200){
+                    localStorage.setItem("loggedinRestId",response.data)
                     this.setState({
                         restFlag : true
                     })

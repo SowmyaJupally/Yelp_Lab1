@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router';
 import { Button, Container, Table, Card } from "react-bootstrap";
+import Navigationbar from '../Navigationbar';
 
 
 class OrderBillView extends Component {
@@ -90,7 +91,7 @@ class OrderBillView extends Component {
                 );
             return (
                 <div>
-                    
+                    <Navigationbar/>
                     {redirectVar}
                     <Container className="justify-content">
                         {billCard}
