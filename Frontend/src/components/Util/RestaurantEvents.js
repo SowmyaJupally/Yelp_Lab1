@@ -9,7 +9,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 //Define a Login Component
-class Events extends Component{
+class RestaurantEvents extends Component{
     //call the constructor method
     constructor(props){
         super(props);
@@ -19,10 +19,15 @@ class Events extends Component{
             eventFlag : false,
             event_id:this.props.match.params.id
         }
-        this.submitEvents = this.submitEvents.bind(this);
         
     }
     
+    redirect(e,id){
+
+        this.setState({
+            redirect: "/eventUsers/"+id
+        })
+    }
     //Call the Will Mount to set the auth Flag to false
     componentWillMount(){
         this.setState({
@@ -31,7 +36,7 @@ class Events extends Component{
     }
 
     componentDidMount(){
-        axios.get(`${backendServer}/getevents/`)
+        axios.get(`${backendServer}/getRestauarantEvents/${localStorage.getItem("loggedinRestId")}`)
         .then((response)=>{
             this.setState({
                 events: this.state.events.concat(response.data)
@@ -44,41 +49,17 @@ class Events extends Component{
     // }
     
     //submit event handler to send a request to the node backend
-    submitEvents = (e,id) => {
-        //prevent page from refresh
-        e.preventDefault();
-        const data = {
-            event_id: id,
-            user_id: localStorage.getItem("user_id")
-            
-        }
-        //set the with credentials to true
-        axios.defaults.withCredentials = true;
-        //make a post request with the user data
-        axios.post(`${backendServer}/events`,data)
-            .then(response => {
-                console.log("Status Code : ",response.status);
-                if(response.status === 200){
-                    this.setState({
-                        homeFlag : true
-                    })
-                }else{
-                    this.setState({
-                        homeFlag : false
-                    })
-                }
-                
-
-            });
-    }
+    
     
 
     render(){
         /*redirect based on successful login*/
         let redirectVar = null;
-        if(this.state.homeFlag){
-            redirectVar = <Redirect to= "/registeredEvents"/>
+
+        if(this.state.redirect){
+            redirectVar = <Redirect to= {this.state.redirect}/>
         }
+        
             var details = this.state.events.map((event)=>{
                 return(
                 <div>
@@ -133,7 +114,8 @@ class Events extends Component{
                     <i className='fas fa-calendar-alt'></i>
             </button>
             <p class="card-text"> {event.event_date}</p></form>
-                <button onClick = {e=>this.submitEvents(e,event.event_id)} class="btn btn-primary">Register Event</button>
+                    <button onClick = {e=>this.redirect(e,event.event_id)} class="btn btn-primary"> Registered Users</button>
+                <button hidden ="true" class="btn btn-primary">Register Event</button>
                 </div></div>
                 
 
@@ -153,4 +135,4 @@ class Events extends Component{
 }
 
 //export Login Component
-export default Events;
+export default RestaurantEvents;

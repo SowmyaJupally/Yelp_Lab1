@@ -4,6 +4,7 @@ import axios from 'axios';
 import cookie from 'react-cookies';
 import { Redirect } from 'react-router';
 import logo from '../../yelp.png';
+import backendServer from '../../webconfig';
 import 'bootstrap/dist/css/bootstrap.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { Dropdown } from 'react-bootstrap';
@@ -90,7 +91,7 @@ class CustomerHome extends Component {
     //set the with credentials to true
     axios.defaults.withCredentials = true;
     //make a post request with the user data
-    axios.post('http://localhost:3001/customerhome', data)
+    axios.post(`${backendServer}/customerhome`, data)
       .then(response => {
         console.log("Status Code : ", response.status);
         if (response.status === 200) {

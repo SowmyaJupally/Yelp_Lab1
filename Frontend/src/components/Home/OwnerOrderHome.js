@@ -174,6 +174,8 @@ class OwnerOrderHome extends Component {
                     {orderCards}
                 </Container>
                 <a href = "/menu">menu</a>
+                <br></br>
+                <a href = "/createevents">Events</a>
             </div>
         )
     }

@@ -5,6 +5,7 @@ import cookie from 'react-cookies';
 import {Redirect} from 'react-router';
 import logo from '../../yelp.png';
 import 'bootstrap/dist/css/bootstrap.css';
+import backendServer from '../../webconfig';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { Dropdown } from 'react-bootstrap';
 
@@ -61,7 +62,7 @@ class Reviews extends Component{
         //set the with credentials to true
         axios.defaults.withCredentials = true;
         //make a post request with the user data
-        axios.post('http://localhost:3001/reviews',data)
+        axios.post(`${backendServer}/reviews`,data)
             .then(response => {
                 console.log("Status Code : ",response.status);
                 if(response.status === 200){

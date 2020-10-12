@@ -240,6 +240,46 @@ app.get('/orderitems/:order_id', (req, res) => {
   });
 });
 
+app.post('/createevents', (req,res)=>{
+
+  let image1 = "https://image.shutterstock.com/image-photo/speaker-giving-talk-on-corporate-600w-481869205.jpg";
+
+  let sql = "insert into Events (event_name,event_date, event_location, event_description, res_id, event_image) VALUES ('" + req.body.event_name + "','" +req.body.event_date +"','"+ req.body.event_location +"','"+ req.body.event_description +"','"+ req.body.res_id +"','"+ image1 +"')";
+  connection.query(sql, (err, result) => {
+    if (err) {
+      res.writeHead(500, {
+        'Content-Type': 'text/plain'
+      });
+      res.end("Database Error");
+    }
+    if (result) {
+      res.writeHead(200, {
+        'Content-Type': 'text/plain'
+      });
+      res.end("STATUS_UPDATED");
+    }
+  });
+})
+
+app.post('/events', (req,res)=>{
+
+  let sql = "insert into register_event_users (event_id,user_id) VALUES ('" + req.body.event_id + "','" +req.body.user_id +"')";
+  connection.query(sql, (err, result) => {
+    if (err) {
+      res.writeHead(500, {
+        'Content-Type': 'text/plain'
+      });
+      res.end("Database Error");
+    }
+    if (result) {
+      res.writeHead(200, {
+        'Content-Type': 'text/plain'
+      });
+      res.end("STATUS_UPDATED");
+    }
+  });
+})
+
 app.post('/orderstatus', (req, res) => {
   let sql = `UPDATE customer_orders SET order_status = '${req.body.order_status}' WHERE order_id = ${req.body.order_id};`;
   connection.query(sql, (err, result) => {
@@ -257,6 +297,9 @@ app.post('/orderstatus', (req, res) => {
     }
   });
 });
+
+
+
 
 app.get('/completedorders/:user_id', (req, res) => {
 
@@ -339,6 +382,59 @@ app.get('/sections/:user_id', (req, res) => {
     }
   });
 });
+
+
+app.get('/getRestauarantEvents/:resId',(req,response)=>{
+  var events = "select * from Events where res_id = "+req.params.resId;
+
+  var results;
+
+  connection.query(events, function(err, res, fields){
+    if(err){
+      response.writeHead(400,{
+        'Content-type':'text/plain'
+      })
+      console.log("res query error", err);
+    }
+    
+    else{
+      console.log("result", res)
+      response.writeHead(200,{
+        'Content-type':'text/plain'
+      })
+      
+      console.log("res query result: ", res);
+      response.end(JSON.stringify(res));
+    }
+  })
+})
+
+
+app.get('/getRegisteredEvents/:userId', (req,response)=>{
+  var events = "select e.event_name, e.event_description, e.event_image,e.event_location,e.res_id,e.event_date from Events e join register_event_users reg on reg.event_id = e.event_id and reg.user_id = "+req.params.userId;
+
+  var results;
+
+  connection.query(events, function(err, res, fields){
+    if(err){
+      response.writeHead(400,{
+        'Content-type':'text/plain'
+      })
+      console.log("res query error", err);
+    }
+    
+    else{
+      console.log("result", res)
+      response.writeHead(200,{
+        'Content-type':'text/plain'
+      })
+      
+      console.log("res query result: ", res);
+      response.end(JSON.stringify(res));
+    }
+  })
+
+})
 
 app.get('/sectionitem/:menu_section_id', (req, res) => {
   let sql = `CALL Menu_Sections_Record_get(${req.params.menu_section_id});`;
@@ -767,9 +863,11 @@ app.post('/restaurants', (req, res) => {
   });
 });
 
-app.get('/events', function(request, response) {
+app.get('/getevents', function(request, response) {
 
-  var events = "select * from Events where Events.Event_ID ='"+ request.params.id+"'";
+  var events = "select * from Events ";
+
+  var results;
 
   connection.query(events, function(err, res, fields){
     if(err){
@@ -778,16 +876,19 @@ app.get('/events', function(request, response) {
       })
       console.log("res query error", err);
     }
+    
     else{
+      console.log("result", res)
       response.writeHead(200,{
         'Content-type':'text/plain'
       })
+      
       console.log("res query result: ", res);
-      response.end("data succesfull");
+      response.end(JSON.stringify(res));
     }
 
   })
-  response.send(events);
+  //response.end(results);
 });
 
 
@@ -855,6 +956,7 @@ app.post('/:user_id/contactInfo/', (req, res) => {
     }
   });
 });
+
 
 
 app.get('/getRestuarantDetails/:id', (req, res)=>{

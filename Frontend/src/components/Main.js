@@ -17,9 +17,12 @@ import OrderBillView from './Orders/OrderBillView';
 import OrderItemsView from './Orders/OrderItemsView';
 import Cart from './Cart/Cart';
 import Menu from './Menu/Menu';
+import CreateEvents from './Home/CreateEvents';
 import Profile from './Profile/Profile';
 import { Provider } from "react-redux";
 import store from "../store";
+import RegisteredEvents from './Util/RegisteredEvents'
+import RestaurantEvents from './Util/RestaurantEvents'
 
 class Main extends Component{
     render(){
@@ -46,7 +49,10 @@ class Main extends Component{
             <Route path = "/menu" component = {Menu}/>
             <Route path = "/cart" component = {Cart}/>
             <Route path="/profile" component={Profile} />
+            <Route path="/createevents" component={CreateEvents} />
             <Route path="/ownerprofile" component={Profile} />
+            <Route path = "/registeredEvents" component = {RegisteredEvents}/>
+            <Route path = "/RestaurantEvents" component = {RestaurantEvents}/>
 
             </div>
             </Provider>
